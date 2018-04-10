@@ -41,7 +41,7 @@ SSO_JWT_VERIFICATION_KEY_FILEPATH={{  edge_sso_jwt_verification_key_filepath | d
 # Name of SAML IDP. For example, okta or adfs.
 SSO_SAML_IDP_NAME={{ edge_sso_saml_ipd_name | default('okta') }}
 # Text displayed to user when they attempt to access Edge UI.
-SSO_SAML_IDP_LOGIN_TEXT={{ edge_sso_saml_ipd_login_text | default("Please log in to your IDP") }}
+SSO_SAML_IDP_LOGIN_TEXT="{{ edge_sso_saml_ipd_login_text | default("Please log in to your IDP") }}"
 
 # The metadata URL from your IDP.
 # If you have a metadata file, and not a URL,
