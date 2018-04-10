@@ -1,17 +1,24 @@
 ---
 # tasks file for apigee-opdk-setup-edge-sso
+- name: Update cache with key and value
+  cache:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items:
+  - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
+  - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
 
 - name: Touch file
   become: yes
   file:
     state: touch
-    path: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+    path: "{{ edge_sso_installation_config_file }}"
 
 - name: Construct the Edge SSO Installation config file file
   become: yes
   template:
-    src: '{{ edge_sso_installation_config_file }}.j2'
-    dest: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+    src: '{{ edge_sso_installation_config_filename }}.j2'
+    dest: "{{ edge_sso_installation_config_file }}"
     force: yes
     owner: '{{ opdk_user_name }}'
     group: '{{ opdk_group_name }}'
@@ -22,7 +29,7 @@
   become: yes
   copy:
     src: "{{ manual_edge_sso_installation_config_file }}"
-    dest: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+    dest: "{{ edge_sso_installation_config_file }}"
     owner: '{{ opdk_user_name }}'
     group: '{{ opdk_group_name }}'
     mode: 0655
