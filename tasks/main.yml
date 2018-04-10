@@ -1,5 +1,17 @@
 ---
 # tasks file for apigee-opdk-setup-edge-sso
+- name: Install openssh
+  become: yes
+  yum:
+    name: openssh
+    state: present
+
+- name: Create Private key and Self Signed Certificate Request
+  include_tasks: create-private-key-and-self-signed-cert.yml
+
+- name: Create Verification and Signing Key
+  include_tasks: create-verification-and-signing-key.yml
+
 - name: Update cache with key and value
   cache:
     key: "{{ item.key }}"

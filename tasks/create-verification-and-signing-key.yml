@@ -1,0 +1,42 @@
+---
+- name: Set jwt-keys path
+  set_fact:
+    jwt_key_folder: "{{ apigee_home }}/customer/application/apigee-sso/jwt-keys"
+
+- name: Create folder for jwt-keys
+  become: yes
+  file:
+    path: "{{ jwt_key_folder }}"
+    state: directory
+    owner: "{{ opdk_user_name }}"
+    group: "{{ opdk_group_name }}"
+
+- name: Create Signing Key
+  become: yes
+  shell: "openssl genrsa -out {{ signing_private_key }} 2048"
+  args:
+    chdir: "{{ jwt_key_folder }}"
+
+- name: Generate Verification Key
+  become: yes
+  shell: "openssl rsa -pubout -in {{ signing_private_key }} -out {{ verification_public_key }}"
+  args:
+    chdir: "{{ jwt_key_folder }}"
+
+- name: Collect .pem files
+  find:
+    paths: "{{ jwt_key_folder }}"
+    patterns: '*.pem'
+  register: pems
+
+- name: Set ownship of certs
+  file:
+    path: "{{ item.1.path }}"
+    state: touch
+    owner: "{{ opdk_user_name }}"
+    group: "{{ opdk_group_name }}"
+  with_subelements:
+  - "{{ pems.results }}"
+  - files
+
+> sudo chown apigee:apigee *.pem

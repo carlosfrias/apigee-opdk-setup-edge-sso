@@ -1,0 +1,48 @@
+---
+- name: Set SAML folder path
+  set_fact:
+    saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml/"
+
+- name: Create SAML folder
+  file:
+    path: "{{ saml_folder }}"
+    state: directory
+    owner: "{{ opdk_user_name }}"
+    group: "{{ opdk_group_name }}"
+
+- name: Generate your private key with a passphrase
+  become: true
+  shell: "openssl genrsa -{{ saml_encryption_type }} -out {{ saml_server_key }} {{ saml_key_size }}"
+  args:
+    chdir: "{{ saml_folder }}"
+
+- name: Remove the passphrase from the key
+  become: yes
+  shell: "openssl rsa -in {{ saml_server_key }} -out {{ saml_server_key }}"
+  args:
+    chdir: "{{ saml_folder }}"
+
+- name: Generate certificate signing request for CA
+  become: yes
+  shell: "openssl req -x509 -sha256 -new -key {{ saml_server_key }} -out {{ saml_cert_signing_request }}"
+
+- name: Generate self-signed certificate with 365 days expiry-time
+  become: yes
+  shell: "openssl x509 -{{ saml_self_encryption_type }} -days {{ saml_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ saml_server_key }} -out {{ saml_self_signed_cert }}"
+
+- name: Collect certificate files
+  find:
+    paths: "{{ saml_folder }}"
+    patterns: '*.crt,*.key'
+  register: certs
+
+- name: Set ownship of certs
+  file:
+    path: "{{ item.1.path }}"
+    state: touch
+    owner: "{{ opdk_user_name }}"
+    group: "{{ opdk_group_name }}"
+  with_subelements:
+  - "{{ certs.results }}"
+  - files
+
