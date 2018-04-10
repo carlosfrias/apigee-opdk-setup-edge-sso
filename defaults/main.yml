@@ -1,2 +1,5 @@
 ---
 # defaults file for apigee-opdk-setup-edge-sso
+
+edge_sso_installation_config_file: edge-sso-installer-config.conf
+

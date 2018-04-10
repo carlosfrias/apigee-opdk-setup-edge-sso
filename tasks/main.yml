@@ -1,2 +1,30 @@
 ---
 # tasks file for apigee-opdk-setup-edge-sso
+
+- name: Touch file
+  become: yes
+  file:
+    state: touch
+    path: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+
+- name: Construct the Edge SSO Installation config file file
+  become: yes
+  template:
+    src: '{{ edge_sso_installation_config_file }}.j2'
+    dest: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+    force: yes
+    owner: '{{ opdk_user_name }}'
+    group: '{{ opdk_group_name }}'
+    mode: 0655
+  when: manual_edge_sso_installation_config_file is not defined or not manual_edge_sso_installation_config_file
+
+- name: Copy the provided Edge SSO Installation config file
+  become: yes
+  copy:
+    src: "{{ manual_edge_sso_installation_config_file }}"
+    dest: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file }}"
+    owner: '{{ opdk_user_name }}'
+    group: '{{ opdk_group_name }}'
+    mode: 0655
+  when: manual_edge_sso_installation_config_file is defined and manual_edge_sso_installation_config_file
+
