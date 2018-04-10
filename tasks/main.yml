@@ -1,12 +1,12 @@
 ---
 # tasks file for apigee-opdk-setup-edge-sso
-#- name: Update cache with key and value
-#  cache:
-#    key: "{{ item.key }}"
-#    value: "{{ item.value }}"
-#  with_items:
-#  - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
-#  - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
+- name: Update cache with key and value
+  cache:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items:
+  - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
+  - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
 
 - name: Touch file
   become: yes
