@@ -1,5 +1,5 @@
 IP1={{ local_mgmt_ip }}
-IP2={{ public_address }}
+IP2={{ private_address }}
 
 ## Management Server configuration.
 MSIP=$IP1
@@ -65,7 +65,7 @@ SSO_SAML_SERVICE_PROVIDER_CERTIFICATE={{  edge_sso_saml_service_provider_certifi
 SMTPMAILFROM="{{ opdk_smtp_mail_from }} <{{  opdk_user_email }}>"
 
 SKIP_SMTP={{ opdk_smtp_skip }}
-{% if opdk_smtp_skip | trim == 'y' %}
+{% if opdk_smtp_skip | trim == 'n' %}
     SMTPHOST={{ opdk_smtp_host }}
     SMTPPORT={{ opdk_smtp_port }}
     SMTPUSER={{ opdk_smtp_user }}
