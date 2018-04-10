@@ -27,7 +27,7 @@ SSO_PUBLIC_URL_PORT={{ edge_sso_public_url_port | default(9099) }}
 SSO_TOMCAT_PORT={{ edge_sso_tomcat_port | default(9099) }}
 # Set Tomcat TLS mode to DEFAULT to use HTTP access to apigee-sso.
 SSO_TOMCAT_PROFILE={{ edge_sso_tomcat_profile | default('DEFAULT') }}
-SSO_PUBLIC_URL_SCHEME={{ edge_sso_public_url_scheme | default(http) }}
+SSO_PUBLIC_URL_SCHEME={{ edge_sso_public_url_scheme | default('http') }}
 
 # SSO admin user name. The default is ssoadmin.
 SSO_ADMIN_NAME={{ edge_sso_admin_name | default('ssoadmin') }}
