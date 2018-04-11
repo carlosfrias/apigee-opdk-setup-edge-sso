@@ -9,11 +9,11 @@
 
 - name: Create Private key and Self Signed Certificate Request
   tags: ['private']
-  include_tasks: create-private-key-and-self-signed-cert.yml
+  include_tasks: create-saml-keys-cert.yml
 
 - name: Create Verification and Signing Key
   tags: ['verify']
-  include_tasks: create-verification-and-signing-key.yml
+  include_tasks: create-jwt-keys.yml
 
 - name: Update cache with key and value
   cache:
