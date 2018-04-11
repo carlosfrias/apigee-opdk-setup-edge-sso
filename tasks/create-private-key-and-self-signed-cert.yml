@@ -12,12 +12,13 @@
       group: "{{ opdk_group_name }}"
 
   - name: Generate a passphrase
-    shell: "openssl rand -base64 48 > passphrase.txt"
+    command: "openssl rand -base64 48"
     args:
       chdir: "{{ saml_folder }}"
+    register: passphrase
 
   - name: Generate your private key with a passphrase
-    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:xxxx -out {{ saml_private_server_key }} {{ saml_private_key_size }}"
+    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase }} -out {{ saml_private_server_key }} {{ saml_private_key_size }}"
     args:
       chdir: "{{ saml_folder }}"
 
@@ -28,12 +29,12 @@
       remote_src: yes
 
   - name: Remove the passphrase from the key
-    shell: "openssl rsa -in remove-passphrase-{{ saml_private_server_key }} -passin pass:xxxx -out {{ saml_private_server_key }}"
+    shell: "openssl rsa -in remove-passphrase-{{ saml_private_server_key }} -passin pass:{{ passphrase }} -out {{ saml_private_server_key }}"
     args:
       chdir: "{{ saml_folder }}"
 
   - name: Generate certificate signing request for CA
-    shell: "openssl req -x509 -sha256 -new -passin file:passphrase.txt -key {{ saml_private_server_key }} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
+    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase }}  -key {{ saml_private_server_key }} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
     args:
       chdir: "{{ saml_folder }}"
 
