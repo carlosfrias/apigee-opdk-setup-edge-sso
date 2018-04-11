@@ -13,9 +13,12 @@
 
 - name: Generate your private key with a passphrase
   become: true
-  shell: "openssl genrsa -{{ saml_encryption_type }} -out {{ saml_server_key }} {{ saml_private_key_size }}"
-  args:
+  expect:
+    echo: yes
+    command: "openssl genrsa -{{ saml_encryption_type }} -out {{ saml_server_key }} {{ saml_private_key_size }}"
     chdir: "{{ saml_folder }}"
+    responses:
+      Enter pass phrase for server.key: "\n"
 
 - name: Remove the passphrase from the key
   become: yes
