@@ -3,50 +3,47 @@
   set_fact:
     saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml"
 
-- name: Create SAML folder
-  become: true
-  file:
-    path: "{{ saml_folder }}"
-    state: directory
-    owner: "{{ opdk_user_name }}"
-    group: "{{ opdk_group_name }}"
+- block:
+  - name: Create SAML folder
+    file:
+      path: "{{ saml_folder }}"
+      state: directory
+      owner: "{{ opdk_user_name }}"
+      group: "{{ opdk_group_name }}"
 
-#- name: Generate a passphrase
-#  become: true
-#  command: openssl rand -base64 48 > passphrase.txt
-#  args:
-#    chdir: "{{ saml_folder }}"
+  #- name: Generate a passphrase
+  #  become: true
+  #  command: openssl rand -base64 48 > passphrase.txt
+  #  args:
+  #    chdir: "{{ saml_folder }}"
 
-- name: Generate your private key with a passphrase
-  become: true
-  command: "openssl genrsa -{{ saml_encryption_type }} -passout pass:xxxx -out {{ saml_server_key }} {{ saml_private_key_size }}"
-  args:
-    chdir: "{{ saml_folder }}"
+  - name: Generate your private key with a passphrase
+    command: "openssl genrsa -{{ saml_encryption_type }} -passout pass:xxxx -out {{ saml_server_key }} {{ saml_private_key_size }}"
+    args:
+      chdir: "{{ saml_folder }}"
 
-- name: Prep to remove Passphrase from Key
-  copy:
-    dest: "{{ saml_folder }}/remove-passphrase-{{ saml_server_key }}"
-    src: "{{ saml_folder }}/{{ saml_server_key }}"
-    remote_src: yes
+  - name: Prep to remove Passphrase from Key
+    copy:
+      dest: "{{ saml_folder }}/remove-passphrase-{{ saml_server_key }}"
+      src: "{{ saml_folder }}/{{ saml_server_key }}"
+      remote_src: yes
 
-- name: Remove the passphrase from the key
+  - name: Remove the passphrase from the key
+    shell: "openssl rsa -in remove-passphrase-{{ saml_server_key }} -passin pass:xxxx -out {{ saml_server_key }}"
+    args:
+      chdir: "{{ saml_folder }}"
+
+  - name: Generate certificate signing request for CA
+    shell: "openssl req -x509 -sha256 -new -passin file:passphrase.txt -key {{ saml_server_key }} -out {{ saml_cert_signing_request }}"
+    args:
+      chdir: "{{ saml_folder }}"
+
+  - name: Generate self-signed certificate with 365 days expiry-time
+    shell: "openssl x509 -{{ saml_self_encryption_type }} -days {{ saml_self_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ saml_server_key }} -out {{ saml_self_signed_cert }}"
+    args:
+      chdir: "{{ saml_folder }}"
+
   become: yes
-  shell: "openssl rsa -in remove-passphrase-{{ saml_server_key }} -passin pass:xxxx -out {{ saml_server_key }}"
-  args:
-    chdir: "{{ saml_folder }}"
-
-- name: Generate certificate signing request for CA
-  become: yes
-  shell: "openssl req -x509 -sha256 -new -passin file:passphrase.txt -key {{ saml_server_key }} -out {{ saml_cert_signing_request }}"
-  args:
-    chdir: "{{ saml_folder }}"
-
-- name: Generate self-signed certificate with 365 days expiry-time
-  become: yes
-  shell: "openssl x509 -{{ saml_self_encryption_type }} -days {{ saml_self_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ saml_server_key }} -out {{ saml_self_signed_cert }}"
-  args:
-    chdir: "{{ saml_folder }}"
-
 
 #- name: Collect certificate files
 #  find:
