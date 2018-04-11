@@ -16,3 +16,5 @@ saml_cert_signing_request: server.csr
 saml_cert_self_signed: server.crt
 saml_cert_encryption_type: sha256
 saml_cert_expiry_days: 365
+
+saml_cert_subject: "/C=US/O=google/OU=apigee/CN=apigee.com"
