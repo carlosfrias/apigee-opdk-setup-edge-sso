@@ -27,6 +27,7 @@
   copy:
     dest: "{{ saml_folder }}/remove-passphrase-{{ saml_server_key }}"
     src: "{{ saml_folder }}/{{ saml_server_key }}"
+    remote_src: yes
 
 - name: Remove the passphrase from the key
   become: yes
