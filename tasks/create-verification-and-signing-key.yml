@@ -19,7 +19,7 @@
 
 - name: Generate Verification Key
   become: yes
-  shell: "openssl rsa -pubout -in {{ signing_private_key }} -out {{ verification_public_key }}"
+  shell: "openssl rsa -pubout -in {{ verification_private_key }} -out {{ signing_public_key }}"
   args:
     chdir: "{{ jwt_key_folder }}"
 
