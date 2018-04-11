@@ -41,14 +41,14 @@
     patterns: '*.crt,*.key'
   register: certs
 
-- name: Set ownship of certs
-  become: yes
-  file:
-    path: "{{ item.1.path }}"
-    state: touch
-    owner: "{{ opdk_user_name }}"
-    group: "{{ opdk_group_name }}"
-  with_subelements:
-  - "{{ certs.results }}"
-  - files
+#- name: Set ownship of certs
+#  become: yes
+#  file:
+#    path: "{{ item.1.path }}"
+#    state: touch
+#    owner: "{{ opdk_user_name }}"
+#    group: "{{ opdk_group_name }}"
+#  with_subelements:
+#  - "{{ certs.results }}"
+#  - files
 
