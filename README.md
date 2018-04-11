@@ -6,7 +6,7 @@ This role will setup the SSO component of the Apigee Edge platform. This is used
 Requirements
 ------------
 
-This role requires elevated priviledge to install OpenSSL.  
+This role requires elevated privilege to install OpenSSL.  
 
 Role Variables
 --------------
