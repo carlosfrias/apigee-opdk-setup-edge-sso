@@ -1,8 +1,5 @@
-IP1={{ local_mgmt_ip }}
-IP2={{ private_address }}
-
 ## Management Server configuration.
-MSIP=$IP1
+MSIP={{ local_mgmt_ip }}
 MGMT_PORT={{ ms_ext_mgmt_port }}
 # Edge sys admin username and password as set when you installed Edge.
 ADMIN_EMAIL={{ opdk_user_email }}
@@ -21,7 +18,7 @@ PG_PWD={{ pg_pass }}
 # apigee-sso configuration.
 SSO_PROFILE={{ edge_sso_profile | default("saml") }}
 # Externally accessible IP or DNS name of apigee-sso.
-SSO_PUBLIC_URL_HOSTNAME=$IP2
+SSO_PUBLIC_URL_HOSTNAME=$MSIP
 # Default port is 9099. If changing, set both properties to the same value.
 SSO_PUBLIC_URL_PORT={{ edge_sso_public_url_port | default(9099) }}
 SSO_TOMCAT_PORT={{ edge_sso_tomcat_port | default(9099) }}
