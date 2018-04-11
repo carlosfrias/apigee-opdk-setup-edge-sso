@@ -35,11 +35,11 @@
   args:
     chdir: "{{ saml_folder }}"
 
-- name: Collect certificate files
-  find:
-    paths: "{{ saml_folder }}"
-    patterns: '*.crt,*.key'
-  register: certs
+#- name: Collect certificate files
+#  find:
+#    paths: "{{ saml_folder }}"
+#    patterns: '*.crt,*.key'
+#  register: certs
 
 #- name: Set ownship of certs
 #  become: yes

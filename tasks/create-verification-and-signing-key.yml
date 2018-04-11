@@ -23,11 +23,11 @@
   args:
     chdir: "{{ jwt_key_folder }}"
 
-- name: Collect .pem files
-  find:
-    paths: "{{ jwt_key_folder }}"
-    patterns: '*.pem'
-  register: pems
+#- name: Collect .pem files
+#  find:
+#    paths: "{{ jwt_key_folder }}"
+#    patterns: '*.pem'
+#  register: pems
 
 #- name: Set ownship of certs
 #  become: yes
