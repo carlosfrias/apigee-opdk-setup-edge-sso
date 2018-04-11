@@ -7,6 +7,14 @@
     name: openssh
     state: present
 
+- name: Update cache with key and value
+  cache:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items:
+  - { key: 'edge_sso_jwt_private_key_filepath', value: '{{ edge_sso_jwt_private_key_filepath }}' }
+  - { key: 'edge_sso_saml_service_provider_key', value: '{{ edge_sso_saml_service_provider_key }}' }
+
 - name: Create Private key and Self Signed Certificate Request
   tags: ['private']
   include_tasks: create-saml-keys-cert.yml

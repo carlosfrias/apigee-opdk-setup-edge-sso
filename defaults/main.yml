@@ -5,11 +5,14 @@ edge_sso_installation_config_file: "{{ opdk_installer_path }}/{{ edge_sso_instal
 
 jwt_key_folder: "{{ apigee_home }}/customer/application/apigee-sso/jwt-keys"
 jwt_private_key: private_key.pem
+edge_sso_jwt_private_key_filepath: "{{ jwt_key_folder }}/{{ jwt_private_key }}"
 jwt_public_key: public_key.pem
+edge_sso_jwt_public_key_filepath: "{{ jwt_key_folder }}/{{ jwt_public_key }}"
 jwt_key_size: 2048
 
 saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml"
 saml_private_key: server.key
+edge_sso_saml_service_provider_key: "{{ saml_folder }}/{{ saml_private_key }}"
 saml_private_encryption_type: aes256
 saml_private_key_size: 1024
 

@@ -32,8 +32,8 @@ SSO_ADMIN_NAME={{ edge_sso_admin_name | default('ssoadmin') }}
 SSO_ADMIN_SECRET={{ edge_sso_admin_secret | default(opdk_user_pass) }}
 
 # Path to signing key and secret from "Create the TLS keys and certificates" above.
-SSO_JWT_SIGNINIG_KEY_FILEPATH={{ edge_sso_jwt_signing_key_filepath | default('/opt/apigee/customer/application/apigee-sso/jwt-keys/privkey.pem') }}
-SSO_JWT_VERIFICATION_KEY_FILEPATH={{  edge_sso_jwt_verification_key_filepath | default('/opt/apigee/customer/application/apigee-sso/jwt-keys/pubkey.pem') }}
+SSO_JWT_SIGNINIG_KEY_FILEPATH={{ edge_sso_jwt_private_key_filepath | default('/opt/apigee/customer/application/apigee-sso/jwt-keys/privkey.pem') }}
+SSO_JWT_VERIFICATION_KEY_FILEPATH={{  edge_sso_jwt_public_key_filepath | default('/opt/apigee/customer/application/apigee-sso/jwt-keys/pubkey.pem') }}
 
 # Name of SAML IDP. For example, okta or adfs.
 SSO_SAML_IDP_NAME={{ edge_sso_saml_ipd_name | default('okta') }}
