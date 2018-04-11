@@ -1,7 +1,7 @@
 ---
 - name: Set SAML folder path
   set_fact:
-    saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml/"
+    saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml"
 
 - name: Create SAML folder
   become: true
