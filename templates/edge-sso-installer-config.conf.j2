@@ -12,7 +12,7 @@ APIGEE_ADMINPW={{ opdk_user_pass }}
 MS_SCHEME={{ edge_sso_ms_scheme | default('http') }}
 
 ## Postgres configuration.
-PG_HOST=$IP1
+PG_HOST={{ pgmaster_ip | default(pg_ip) }}
 PG_PORT=5432
 # Postgres username and password as set when you installed Edge.
 PG_USER={{ pg_user }}
