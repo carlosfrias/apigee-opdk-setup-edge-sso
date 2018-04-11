@@ -9,7 +9,7 @@ signing_public_key: public_key.pem
 
 saml_server_key: server.key
 saml_encryption_type: aes256
-saml_key_size: 1024
+saml_key_size: 2048
 saml_cert_signing_request: server.csr
 saml_self_signed_cert: server.crt
 saml_self_encryption_type: sha256
