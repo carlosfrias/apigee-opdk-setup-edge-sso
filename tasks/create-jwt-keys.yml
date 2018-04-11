@@ -1,5 +1,5 @@
 ---
-- become:
+- block:
   - name: Create folder for jwt-keys
     file:
       path: "{{ jwt_key_folder }}"
