@@ -13,7 +13,7 @@
 
 - name: Create Signing Key
   become: yes
-  shell: "openssl genrsa -out {{ verification_private_key }} {{ saml_key_size }}"
+  shell: "openssl genrsa -out {{ verification_private_key }} {{ saml_self_key_size }}"
   args:
     chdir: "{{ jwt_key_folder }}"
 

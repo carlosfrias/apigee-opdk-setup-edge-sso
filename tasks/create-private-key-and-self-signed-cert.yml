@@ -13,7 +13,7 @@
 
 - name: Generate your private key with a passphrase
   become: true
-  shell: "openssl genrsa -{{ saml_encryption_type }} -out {{ saml_server_key }} {{ saml_key_size }}"
+  shell: "openssl genrsa -{{ saml_encryption_type }} -out {{ saml_server_key }} {{ saml_private_key_size }}"
   args:
     chdir: "{{ saml_folder }}"
 
