@@ -30,6 +30,7 @@
   register: pems
 
 - name: Set ownship of certs
+  become: yes
   file:
     path: "{{ item.1.path }}"
     state: touch
@@ -38,5 +39,3 @@
   with_subelements:
   - "{{ pems.results }}"
   - files
-
-> sudo chown apigee:apigee *.pem

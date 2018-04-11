@@ -4,6 +4,7 @@
     saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml/"
 
 - name: Create SAML folder
+  become: true
   file:
     path: "{{ saml_folder }}"
     state: directory
@@ -37,6 +38,7 @@
   register: certs
 
 - name: Set ownship of certs
+  become: yes
   file:
     path: "{{ item.1.path }}"
     state: touch
