@@ -11,7 +11,24 @@ None
 Role Variables
 --------------
 
-None
+
+edge_sso_installation_config_filename: edge-sso-installer-config.conf
+edge_sso_installation_config_file: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_filename }}"
+
+verification_private_key: private_key.pem
+signing_public_key: public_key.pem
+
+saml_private_server_key: server.key
+saml_private_encryption_type: aes256
+saml_private_key_size: 1024
+
+saml_self_key_size: 2048
+saml_cert_signing_request: server.csr
+saml_cert_self_signed: server.crt
+saml_cert_encryption_type: sha256
+saml_cert_expiry_days: 365
+saml_cert_subject: "/C=US/O=google/OU=apigee/CN=apigee.com"
+
 
 Dependencies
 ------------

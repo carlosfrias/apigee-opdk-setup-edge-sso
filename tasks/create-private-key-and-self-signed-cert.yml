@@ -33,6 +33,11 @@
     args:
       chdir: "{{ saml_folder }}"
 
+  - name: Delete Passphrase remove file
+    file:
+      path: "{{ saml_folder }}/remove-passphrase-{{ saml_private_server_key }}"
+      state: absent
+
   - name: Generate certificate signing request for CA
     shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ saml_private_server_key }} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
     args:
