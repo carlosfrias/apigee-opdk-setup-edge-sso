@@ -12,7 +12,7 @@
       group: "{{ opdk_group_name }}"
 
   - name: Generate a passphrase
-    command: "openssl rand -base64 48 > passphrase.txt"
+    shell: "openssl rand -base64 48 > passphrase.txt"
     args:
       chdir: "{{ saml_folder }}"
 
