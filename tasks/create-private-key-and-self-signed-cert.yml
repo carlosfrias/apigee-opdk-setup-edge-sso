@@ -19,7 +19,7 @@
     chdir: "{{ saml_folder }}"
     responses:
       Question:
-        Enter pass phrase for server.key:
+        Enter pass phrase for server.key(?):
         - "\n"
 
 - name: Remove the passphrase from the key
