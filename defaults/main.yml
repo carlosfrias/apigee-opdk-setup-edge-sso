@@ -13,4 +13,4 @@ saml_key_size: 1024
 saml_cert_signing_request: server.csr
 saml_self_signed_cert: server.crt
 saml_self_encryption_type: sha256
-saml_expiry_days: 365
+saml_self_expiry_days: 365
