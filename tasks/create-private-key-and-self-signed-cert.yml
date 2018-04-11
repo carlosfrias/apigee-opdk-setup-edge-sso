@@ -1,8 +1,4 @@
 ---
-- name: Set SAML folder path
-  set_fact:
-    saml_folder: "{{ apigee_home }}/customer/application/apigee-sso/saml"
-
 - block:
   - name: Create SAML folder
     file:
@@ -18,33 +14,33 @@
     register: passphrase
 
   - name: Generate your private key with a passphrase
-    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ saml_private_server_key }} {{ saml_private_key_size }}"
+    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ saml_private_key }} {{ saml_private_key_size }}"
     args:
       chdir: "{{ saml_folder }}"
 
-  - name: Prep to remove Passphrase from Key
+  - name: Prep to remove passphrase from Key
     copy:
-      dest: "{{ saml_folder }}/remove-passphrase-{{ saml_private_server_key }}"
-      src: "{{ saml_folder }}/{{ saml_private_server_key }}"
+      dest: "{{ saml_folder }}/remove-passphrase-{{ saml_private_key }}"
+      src: "{{ saml_folder }}/{{ saml_private_key }}"
       remote_src: yes
 
   - name: Remove the passphrase from the key
-    shell: "openssl rsa -in remove-passphrase-{{ saml_private_server_key }} -passin pass:{{ passphrase.stdout }} -out {{ saml_private_server_key }}"
+    shell: "openssl rsa -in remove-passphrase-{{ saml_private_key }} -passin pass:{{ passphrase.stdout }} -out {{ saml_private_key }}"
     args:
       chdir: "{{ saml_folder }}"
 
-  - name: Delete Passphrase remove file
+  - name: Clean up passphrase removal file
     file:
-      path: "{{ saml_folder }}/remove-passphrase-{{ saml_private_server_key }}"
+      path: "{{ saml_folder }}/remove-passphrase-{{ saml_private_key }}"
       state: absent
 
   - name: Generate certificate signing request for CA
-    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ saml_private_server_key }} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
+    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ saml_private_key }} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
     args:
       chdir: "{{ saml_folder }}"
 
   - name: Generate self-signed certificate with 365 days expiry-time
-    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ saml_private_server_key }} -out {{ saml_cert_self_signed }}"
+    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ saml_private_key }} -out {{ saml_cert_self_signed_cert }}"
     args:
       chdir: "{{ saml_folder }}"
 

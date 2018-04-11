@@ -1,41 +1,42 @@
 ---
-- name: Set jwt-keys path
-  set_fact:
-    jwt_key_folder: "{{ apigee_home }}/customer/application/apigee-sso/jwt-keys"
+- become:
+  - name: Create folder for jwt-keys
+    file:
+      path: "{{ jwt_key_folder }}"
+      state: directory
+      owner: "{{ opdk_user_name }}"
+      group: "{{ opdk_group_name }}"
 
-- name: Create folder for jwt-keys
+  - name: Generate a passphrase
+    command: "openssl rand -base64 48"
+    args:
+      chdir: "{{ jwt_key_folder }}"
+    register: passphrase
+
+  - name: Create Signing Key
+    shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ jwt_private_key }} {{ jwt_key_size }}"
+    args:
+      chdir: "{{ jwt_key_folder }}"
+
+  - name: Prep to remove passphrase from Key
+    copy:
+      dest: "{{ jwt_key_folder }}/remove-passphrase-{{ jwt_private_key }}"
+      src: "{{ jwt_key_folder }}/{{ jwt_private_key }}"
+      remote_src: yes
+
+  - name: Remove the passphrase from the key
+    shell: "openssl rsa -in remove-passphrase-{{ jwt_private_key }} -passin pass:{{ passphrase.stdout }} -out {{ jwt_private_key }}"
+    args:
+      chdir: "{{ jwt_key_folder }}"
+
+  - name: Clean up passphrase removal file
+    file:
+      path: "{{ jwt_key_folder }}/remove-passphrase-{{ jwt_private_key }}"
+      state: absent
+
+  - name: Generate Verification Key
+    shell: "openssl rsa -pubout -in {{ jwt_private_key }} -out {{ jwt_public_key }}"
+    args:
+      chdir: "{{ jwt_key_folder }}"
+
   become: yes
-  file:
-    path: "{{ jwt_key_folder }}"
-    state: directory
-    owner: "{{ opdk_user_name }}"
-    group: "{{ opdk_group_name }}"
-
-- name: Create Signing Key
-  become: yes
-  shell: "openssl genrsa -out {{ verification_private_key }} {{ saml_self_key_size }}"
-  args:
-    chdir: "{{ jwt_key_folder }}"
-
-- name: Generate Verification Key
-  become: yes
-  shell: "openssl rsa -pubout -in {{ verification_private_key }} -out {{ signing_public_key }}"
-  args:
-    chdir: "{{ jwt_key_folder }}"
-
-#- name: Collect .pem files
-#  find:
-#    paths: "{{ jwt_key_folder }}"
-#    patterns: '*.pem'
-#  register: pems
-
-#- name: Set ownship of certs
-#  become: yes
-#  file:
-#    path: "{{ item.1.path }}"
-#    state: touch
-#    owner: "{{ opdk_user_name }}"
-#    group: "{{ opdk_group_name }}"
-#  with_subelements:
-#  - "{{ pems.results }}"
-#  - files
