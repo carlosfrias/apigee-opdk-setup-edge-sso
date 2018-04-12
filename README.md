@@ -38,7 +38,7 @@ Role Variables
 Dependencies
 ------------
 
-None
+* apigee-opdk-setup-default-settings
 
 Example Playbook
 ----------------
