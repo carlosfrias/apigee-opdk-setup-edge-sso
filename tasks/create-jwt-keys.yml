@@ -13,7 +13,7 @@
       chdir: "{{ jwt_key_folder }}"
     register: passphrase
 
-  - name: Create Signing Key
+  - name: Generate your private key with a passphrase
     shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ jwt_private_key }} {{ jwt_key_size }}"
     args:
       chdir: "{{ jwt_key_folder }}"

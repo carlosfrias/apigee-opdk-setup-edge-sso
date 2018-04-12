@@ -7,42 +7,56 @@
       owner: "{{ opdk_user_name }}"
       group: "{{ opdk_group_name }}"
 
-  - name: Generate a passphrase
-    command: "openssl rand -base64 48"
-    args:
-      chdir: "{{ saml_folder }}"
-    register: passphrase
+#  - name: Generate a passphrase
+#    command: "openssl rand -base64 48"
+#    args:
+#      chdir: "{{ saml_folder }}"
+#    register: passphrase
+#
+#  - name: Generate your private key with a passphrase
+#    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}} {{ saml_private_key_size }}"
+#    args:
+#      chdir: "{{ saml_folder }}"
+
+  - name: Calculate 365 days
+    command: date -d '+365 days' +%y%m%d%H%M
+    register: expiry
 
   - name: Generate your private key with a passphrase
-    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}} {{ saml_private_key_size }}"
-    args:
-      chdir: "{{ saml_folder }}"
+    openssl_certificate:
+      path: "{{ sso_saml_service_provider_certificate_filename }}"
+      privatekey_path: "{{ sso_saml_service_provider_key_filename }}"
+      csr_path: "{{ saml_cert_signing_request_file_name }}"
+      provider: selfsigned
+      subject: "{{ saml_cert_subject }}"
+      state: present
+      not_after: "{{ expiry.stdout }}"
 
-  - name: Prep to remove passphrase from Key
-    copy:
-      dest: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
-      src: "{{ saml_folder }}/{{ sso_saml_service_provider_key_filename}}"
-      remote_src: yes
+#  - name: Prep to remove passphrase from Key
+#    copy:
+#      dest: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
+#      src: "{{ saml_folder }}/{{ sso_saml_service_provider_key_filename}}"
+#      remote_src: yes
+#
+#  - name: Remove the passphrase from the key
+#    shell: "openssl rsa -in remove-passphrase-{{ sso_saml_service_provider_key_filename}} -passin pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}}"
+#    args:
+#      chdir: "{{ saml_folder }}"
+#
+#  - name: Clean up passphrase removal file
+#    file:
+#      path: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
+#      state: absent
+#
+#  - name: Generate certificate signing request for CA
+#    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ sso_saml_service_provider_key_filename}} -out {{ saml_cert_signing_request_file_name }} -subj {{ saml_cert_subject }}"
+#    args:
+#      chdir: "{{ saml_folder }}"
 
-  - name: Remove the passphrase from the key
-    shell: "openssl rsa -in remove-passphrase-{{ sso_saml_service_provider_key_filename}} -passin pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}}"
-    args:
-      chdir: "{{ saml_folder }}"
-
-  - name: Clean up passphrase removal file
-    file:
-      path: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
-      state: absent
-
-  - name: Generate certificate signing request for CA
-    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ sso_saml_service_provider_key_filename}} -out {{ saml_cert_signing_request }} -subj {{ saml_cert_subject }}"
-    args:
-      chdir: "{{ saml_folder }}"
-
-  - name: Generate self-signed certificate with 365 days expiry-time
-    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request }} -signkey {{ sso_saml_service_provider_key_filename}} -out {{ sso_saml_service_provider_certificate_filename }}"
-    args:
-      chdir: "{{ saml_folder }}"
+#  - name: Generate self-signed certificate with 365 days expiry-time
+#    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request_file_name }} -signkey {{ sso_saml_service_provider_key_filename}} -out {{ sso_saml_service_provider_certificate_filename }}"
+#    args:
+#      chdir: "{{ saml_folder }}"
 
   become: yes
 

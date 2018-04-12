@@ -15,7 +15,8 @@ sso_saml_service_provider_key_filename: server.key
 sso_saml_service_provider_key: "{{ saml_folder }}/{{ sso_saml_service_provider_key_filename}}"
 saml_private_encryption_type: aes256
 saml_private_key_size: 1024
-saml_cert_signing_request: server.csr
+saml_cert_signing_request_file_name: server.csr
+saml_cert_signing_request: "{{ saml_folder }}/{{ saml_cert_signing_request_file_name }}"
 sso_saml_service_provider_certificate_filename: server.crt
 sso_saml_service_provider_certificate: "{{ saml_folder }}/{{ sso_saml_service_provider_certificate_filename }}"
 saml_cert_encryption_type: sha256
