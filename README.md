@@ -39,6 +39,7 @@ Dependencies
 ------------
 
 * apigee-opdk-setup-default-settings
+* apigee-opdk-modules
 
 Example Playbook
 ----------------
