@@ -15,12 +15,10 @@ sso_saml_service_provider_key_filename: server.key
 sso_saml_service_provider_key: "{{ saml_folder }}/{{ sso_saml_service_provider_key_filename}}"
 saml_private_encryption_type: aes256
 saml_private_key_size: 1024
-
 saml_cert_signing_request: server.csr
 sso_saml_service_provider_certificate_filename: server.crt
 sso_saml_service_provider_certificate: "{{ saml_folder }}/{{ sso_saml_service_provider_certificate_filename }}"
 saml_cert_encryption_type: sha256
 saml_cert_expiry_days: 365
 saml_cert_subject: "/C=US/O=google/OU=apigee/CN=apigee.com"
-
 sso_saml_idp_metadata_url: "{{ saml_folder }}/target_idp_metadata_url.xml"
