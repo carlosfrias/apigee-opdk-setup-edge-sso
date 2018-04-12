@@ -12,8 +12,9 @@
     key: "{{ item.key }}"
     value: "{{ item.value }}"
   with_items:
-  - { key: 'edge_sso_jwt_private_key_filepath', value: '{{ edge_sso_jwt_private_key_filepath }}' }
-  - { key: 'edge_sso_saml_service_provider_key', value: '{{ edge_sso_saml_service_provider_key }}' }
+  - { key: 'sso_jwt_signinig_key_filepath', value: '{{ sso_jwt_signinig_key_filepath }}' }
+  - { key: 'sso_saml_service_provider_key', value: '{{ sso_saml_service_provider_key }}' }
+  - { key: 'sso_saml_service_provider_certificate', value: '{{ sso_saml_service_provider_certificate }}' }
 
 - name: Create Private key and Self Signed Certificate Request
   tags: ['private']
@@ -40,7 +41,7 @@
 - name: Assert that availability of SAML IDP metadata file
   assert:
     that:
-    - "edge_sso_saml_idp_metadata_url is defined"
+    - "sso_saml_idp_metadata_url is defined"
 
 - name: Construct the Edge SSO Installation config file file
   become: yes
