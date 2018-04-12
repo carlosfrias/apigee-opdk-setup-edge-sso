@@ -1,7 +1,7 @@
 Apigee OPDK Setup Edge SSO
 =========
 
-This role will setup the SSO component of the Apigee Edge platform. This is used to interface with an on premise IDP. 
+This role will setup the SSO component of the Apigee Edge platform. This is used to interface with an IDP provider. 
 
 Requirements
 ------------
@@ -47,7 +47,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: apigee-opdk-setup-edge-sso }
+         - { role: apigee-opdk-setup-edge-sso-config }
 
 License
 -------
