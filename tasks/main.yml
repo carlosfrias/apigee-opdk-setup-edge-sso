@@ -32,6 +32,18 @@
   - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
   - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
 
+- block:
+  - name: Copy metadata file if provided
+    copy:
+      src: "{{ sso_saml_idp_metadata_local_filename }}"
+      dest: "{{ saml_folder }}/target_idp_metadata.xml"
+
+  - name: Configure SAML IDP Metadata URL with file
+    set_fact:
+      sso_saml_idp_metadata_url: "file://{{ saml_folder }}/target_idp_metadata.xml"
+
+  when: sso_saml_idp_metadata_local_filename is defined and sso_saml_idp_metadata_local_filename | trim | length < 0
+
 - name: Touch file
   become: yes
   file:
