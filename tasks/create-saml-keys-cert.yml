@@ -1,7 +1,7 @@
 ---
 - name: Assert that service provider key file exists
   stat:
-    path: "{{ sso_saml_service_provider_key_filename}}"
+    path: "{{ sso_saml_service_provider_key_file_path }}"
   register: key
 
 - block:
@@ -19,7 +19,7 @@
     register: passphrase
 
   - name: Generate your private key with a passphrase
-    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}} {{ saml_private_key_size }}"
+    command: "openssl genrsa -{{ saml_private_encryption_type }} -passout pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_file_name}} {{ saml_private_key_size }}"
     args:
       chdir: "{{ saml_folder }}"
 
@@ -29,8 +29,8 @@
 #
 #  - name: Generate your private key with a passphrase
 #    openssl_certificate:
-#      path: "{{ sso_saml_service_provider_certificate_filename }}"
-#      privatekey_path: "{{ sso_saml_service_provider_key_filename }}"
+#      path: "{{ sso_saml_service_provider_certificate_file_name }}"
+#      privatekey_path: "{{ sso_saml_service_provider_key_filepath }}"
 #      csr_path: "{{ saml_cert_signing_request_file_name }}"
 #      provider: selfsigned
 #      subject: "{{ saml_cert_subject }}"
@@ -39,27 +39,27 @@
 
   - name: Prep to remove passphrase from Key
     copy:
-      dest: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
-      src: "{{ saml_folder }}/{{ sso_saml_service_provider_key_filename}}"
+      dest: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_file_name}}"
+      src: "{{ sso_saml_service_provider_key_filepath}}"
       remote_src: yes
 
   - name: Remove the passphrase from the key
-    shell: "openssl rsa -in remove-passphrase-{{ sso_saml_service_provider_key_filename}} -passin pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_filename}}"
+    shell: "openssl rsa -in remove-passphrase-{{ sso_saml_service_provider_key_file_name}} -passin pass:{{ passphrase.stdout }} -out {{ sso_saml_service_provider_key_file_name}}"
     args:
       chdir: "{{ saml_folder }}"
 
   - name: Clean up passphrase removal file
     file:
-      path: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_filename}}"
+      path: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_file_name}}"
       state: absent
 
   - name: Generate certificate signing request for CA
-    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ sso_saml_service_provider_key_filename}} -out {{ saml_cert_signing_request_file_name }} -subj {{ saml_cert_subject }}"
+    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ sso_saml_service_provider_key_file_name}} -out {{ saml_cert_signing_request_file_name }} -subj {{ saml_cert_subject }}"
     args:
       chdir: "{{ saml_folder }}"
 
   - name: Generate self-signed certificate with 365 days expiry-time
-    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request_file_name }} -signkey {{ sso_saml_service_provider_key_filename}} -out {{ sso_saml_service_provider_certificate_filename }}"
+    shell: "openssl x509 -{{ saml_cert_encryption_type }} -days {{ saml_cert_expiry_days }} -in {{ saml_cert_signing_request_file_name }} -signkey {{ sso_saml_service_provider_key_file_name}} -out {{ sso_saml_service_provider_certificate_file_name }}"
     args:
       chdir: "{{ saml_folder }}"
 
