@@ -1,4 +1,9 @@
 ---
+- name: Assert whether Private
+  stat:
+    path: "{{ jwt_private_key }}"
+  register: key
+
 - block:
   - name: Create folder for jwt-keys
     file:
@@ -17,6 +22,7 @@
     shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ jwt_private_key }} {{ jwt_key_size }}"
     args:
       chdir: "{{ jwt_key_folder }}"
+      creates: "{{ jwt_private_key }}"
 
   - name: Prep to remove passphrase from Key
     copy:
@@ -40,3 +46,4 @@
       chdir: "{{ jwt_key_folder }}"
 
   become: yes
+  when: key.stat.exists == False

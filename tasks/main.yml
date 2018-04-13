@@ -37,11 +37,15 @@
     copy:
       src: "{{ sso_saml_idp_metadata_local_filename }}"
       dest: "{{ saml_folder }}/target_idp_metadata.xml"
+      owner: "{{ opdk_user_name }}"
+      group: "{{ opdk_group_name }}"
+      mode: 0655
 
   - name: Configure SAML IDP Metadata URL with file
     set_fact:
       sso_saml_idp_metadata_url: "file://{{ saml_folder }}/target_idp_metadata.xml"
 
+  become: true
   when: sso_saml_idp_metadata_local_filename is defined and sso_saml_idp_metadata_local_filename | trim | length < 0
 
 - name: Touch file
