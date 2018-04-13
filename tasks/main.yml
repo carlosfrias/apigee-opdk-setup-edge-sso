@@ -18,6 +18,7 @@
   - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
   - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
   - { key: 'saml_folder', value: "{{ saml_folder }}" }
+  - { key: 'jwt_folder', value: "{{ jwt_folder }}" }
 
 - name: Create Private key and Self Signed Certificate Request
   tags: ['private']

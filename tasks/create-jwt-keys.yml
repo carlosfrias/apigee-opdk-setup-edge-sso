@@ -7,7 +7,7 @@
 - block:
   - name: Create folder for jwt-keys
     file:
-      path: "{{ jwt_key_folder }}"
+      path: "{{ jwt_folder }}"
       state: directory
       owner: "{{ opdk_user_name }}"
       group: "{{ opdk_group_name }}"
@@ -15,35 +15,35 @@
   - name: Generate a passphrase
     command: "openssl rand -base64 48"
     args:
-      chdir: "{{ jwt_key_folder }}"
+      chdir: "{{ jwt_folder }}"
     register: passphrase
 
   - name: Generate your private key with a passphrase
     shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ jwt_private_key }} {{ jwt_key_size }}"
     args:
-      chdir: "{{ jwt_key_folder }}"
+      chdir: "{{ jwt_folder }}"
       creates: "{{ jwt_private_key }}"
 
   - name: Prep to remove passphrase from Key
     copy:
-      dest: "{{ jwt_key_folder }}/remove-passphrase-{{ jwt_private_key }}"
-      src: "{{ jwt_key_folder }}/{{ jwt_private_key }}"
+      dest: "{{ jwt_folder }}/remove-passphrase-{{ jwt_private_key }}"
+      src: "{{ jwt_folder }}/{{ jwt_private_key }}"
       remote_src: yes
 
   - name: Remove the passphrase from the key
     shell: "openssl rsa -in remove-passphrase-{{ jwt_private_key }} -passin pass:{{ passphrase.stdout }} -out {{ jwt_private_key }}"
     args:
-      chdir: "{{ jwt_key_folder }}"
+      chdir: "{{ jwt_folder }}"
 
   - name: Clean up passphrase removal file
     file:
-      path: "{{ jwt_key_folder }}/remove-passphrase-{{ jwt_private_key }}"
+      path: "{{ jwt_folder }}/remove-passphrase-{{ jwt_private_key }}"
       state: absent
 
   - name: Generate Verification Key
     shell: "openssl rsa -pubout -in {{ jwt_private_key }} -out {{ jwt_public_key }}"
     args:
-      chdir: "{{ jwt_key_folder }}"
+      chdir: "{{ jwt_folder }}"
 
   become: yes
   when: key.stat.exists == False
