@@ -23,3 +23,4 @@ saml_cert_encryption_type: sha256
 saml_cert_expiry_days: 365
 saml_cert_subject: "/C=US/O=google/OU=apigee/CN=apigee.com"
 sso_saml_idp_metadata_url: "{{ saml_folder }}/target_idp_metadata_url.xml"
+sso_saml_idp_metadata_target_file_path: "{{ saml_folder }}/target_idp_metadata.xml"

@@ -31,18 +31,18 @@
 - block:
   - name: Copy metadata file if provided
     copy:
-      src: "{{ sso_saml_idp_metadata_local_filename }}"
-      dest: "{{ saml_folder }}/target_idp_metadata.xml"
+      src: "{{ sso_saml_idp_metadata_local_file_name }}"
+      dest: "{{ sso_saml_idp_metadata_target_file_path }}"
       owner: "{{ opdk_user_name }}"
       group: "{{ opdk_group_name }}"
       mode: 0655
 
   - name: Configure SAML IDP Metadata URL with file
     set_fact:
-      sso_saml_idp_metadata_url: "file://{{ saml_folder }}/target_idp_metadata.xml"
+      sso_saml_idp_metadata_url: "file://{{ sso_saml_idp_metadata_target_file_path }}"
 
   become: true
-  when: sso_saml_idp_metadata_local_filename is defined and sso_saml_idp_metadata_local_filename | trim | length < 0
+  when: sso_saml_idp_metadata_local_file_name is defined and sso_saml_idp_metadata_local_file_name | trim | length < 0
 
 - name: Touch file
   become: yes
