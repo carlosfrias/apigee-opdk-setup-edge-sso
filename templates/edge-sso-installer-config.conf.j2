@@ -3,7 +3,7 @@ MSIP={{ local_mgmt_ip }}
 MGMT_PORT={{ ms_ext_mgmt_port }}
 # Edge sys admin username and password as set when you installed Edge.
 ADMIN_EMAIL={{ opdk_user_email }}
-APIGEE_ADMINPW={{ opdk_user_pass }}
+APIGEE_ADMINPW='{{ opdk_user_pass }}'
 # Set the protocol for the Edge management API. Default is http.
 # Set to https if you enabled TLS on the management API.
 MS_SCHEME={{ ms_scheme | default('http') }}
@@ -13,7 +13,7 @@ PG_HOST={{ pgmaster_ip | default(pg_ip) }}
 PG_PORT=5432
 # Postgres username and password as set when you installed Edge.
 PG_USER={{ pg_user }}
-PG_PWD={{ pg_pass }}
+PG_PWD='{{ pg_pass }}'
 
 # apigee-sso configuration.
 SSO_PROFILE={{ sso_profile | default("saml") }}
@@ -29,7 +29,7 @@ SSO_PUBLIC_URL_SCHEME={{ sso_public_url_scheme | default('http') }}
 # SSO admin user name. The default is ssoadmin.
 SSO_ADMIN_NAME={{ sso_admin_name | default('ssoadmin') }}
 # SSO admin password using uppercase, lowercase, number, and special chars.
-SSO_ADMIN_SECRET={{ sso_admin_secret | default(opdk_user_pass) }}
+SSO_ADMIN_SECRET='{{ sso_admin_secret | default(opdk_user_pass) }}'
 
 # Path to signing key and secret from "Create the TLS keys and certificates" above.
 SSO_JWT_SIGNINIG_KEY_FILEPATH={{ sso_jwt_signinig_key_filepath | default('/opt/apigee/customer/application/apigee-sso/jwt-keys/privkey.pem') }}
@@ -56,7 +56,7 @@ SSO_SAML_SERVICE_PROVIDER_CERTIFICATE={{  sso_saml_service_provider_certificate 
 # The passphrase used when you created the SAML cert and key.
 # The section "Create the TLS keys and certificates" above removes the passphrase,
 # but this property is available if you require a passphrase.
-# SSO_SAML_SERVICE_PROVIDER_PASSWORD={{ sso_saml_service_provider_password | default('samlSP123') }}
+# SSO_SAML_SERVICE_PROVIDER_PASSWORD='{{ sso_saml_service_provider_password | default('samlSP123') }}'
 
 # Must configure an SMTP server so Edge SSO can send emails to users.
 SMTPMAILFROM="{{ opdk_smtp_mail_from }} <{{  opdk_user_email }}>"
