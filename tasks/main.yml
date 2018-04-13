@@ -12,7 +12,7 @@
     key: "{{ item.key }}"
     value: "{{ item.value }}"
   with_items:
-  - { key: 'sso_jwt_signinig_key_filepath', value: '{{ sso_jwt_signinig_key_filepath }}' }
+  - { key: 'sso_jwt_signinig_key_file_path', value: '{{ sso_jwt_signinig_key_file_path }}' }
   - { key: 'sso_saml_service_provider_key', value: '{{ sso_saml_service_provider_key }}' }
   - { key: 'sso_saml_service_provider_certificate', value: '{{ sso_saml_service_provider_certificate_file_path}}' }
   - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }

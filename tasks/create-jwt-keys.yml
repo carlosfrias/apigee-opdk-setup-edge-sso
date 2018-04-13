@@ -1,7 +1,7 @@
 ---
 - name: Assert whether Private
   stat:
-    path: "{{ jwt_private_key }}"
+    path: "{{ sso_jwt_signinig_key_file_path }}"
   register: key
 
 - block:
@@ -19,29 +19,28 @@
     register: passphrase
 
   - name: Generate your private key with a passphrase
-    shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ jwt_private_key }} {{ jwt_key_size }}"
+    shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out {{ sso_jwt_signinig_key_file_name }} {{ sso_jwt_signinig_key_size }}"
     args:
       chdir: "{{ jwt_folder }}"
-      creates: "{{ jwt_private_key }}"
 
   - name: Prep to remove passphrase from Key
     copy:
-      dest: "{{ jwt_folder }}/remove-passphrase-{{ jwt_private_key }}"
-      src: "{{ jwt_folder }}/{{ jwt_private_key }}"
+      dest: "{{ jwt_folder }}/remove-passphrase-{{ sso_jwt_signinig_key_file_name }}"
+      src: "{{ jwt_folder }}/{{ sso_jwt_signinig_key_file_name }}"
       remote_src: yes
 
   - name: Remove the passphrase from the key
-    shell: "openssl rsa -in remove-passphrase-{{ jwt_private_key }} -passin pass:{{ passphrase.stdout }} -out {{ jwt_private_key }}"
+    shell: "openssl rsa -in remove-passphrase-{{ sso_jwt_signinig_key_file_name }} -passin pass:{{ passphrase.stdout }} -out {{ sso_jwt_signinig_key_file_name }}"
     args:
       chdir: "{{ jwt_folder }}"
 
   - name: Clean up passphrase removal file
     file:
-      path: "{{ jwt_folder }}/remove-passphrase-{{ jwt_private_key }}"
+      path: "{{ jwt_folder }}/remove-passphrase-{{ sso_jwt_signinig_key_file_name }}"
       state: absent
 
   - name: Generate Verification Key
-    shell: "openssl rsa -pubout -in {{ jwt_private_key }} -out {{ jwt_public_key }}"
+    shell: "openssl rsa -pubout -in {{ sso_jwt_signinig_key_file_name }} -out {{ sso_jwt_verification_key_file_name }}"
     args:
       chdir: "{{ jwt_folder }}"
 
