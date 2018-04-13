@@ -30,7 +30,7 @@
 #  - name: Generate your private key with a passphrase
 #    openssl_certificate:
 #      path: "{{ sso_saml_service_provider_certificate_file_name }}"
-#      privatekey_path: "{{ sso_saml_service_provider_key_filepath }}"
+#      privatekey_path: "{{ sso_saml_service_provider_key_file_path }}"
 #      csr_path: "{{ saml_cert_signing_request_file_name }}"
 #      provider: selfsigned
 #      subject: "{{ saml_cert_subject }}"
@@ -40,7 +40,7 @@
   - name: Prep to remove passphrase from Key
     copy:
       dest: "{{ saml_folder }}/remove-passphrase-{{ sso_saml_service_provider_key_file_name}}"
-      src: "{{ sso_saml_service_provider_key_filepath}}"
+      src: "{{ sso_saml_service_provider_key_file_path}}"
       remote_src: yes
 
   - name: Remove the passphrase from the key
