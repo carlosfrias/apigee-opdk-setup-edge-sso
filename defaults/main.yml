@@ -1,7 +1,7 @@
 ---
 # defaults file for apigee-opdk-setup-edge-sso
-edge_sso_installation_config_filename: edge-sso-installer-config.conf
-edge_sso_installation_config_file: "{{ opdk_installer_path }}/{{ edge_sso_installation_config_filename }}"
+edge_sso_installation_config_file_name: edge-sso-installer-config.conf
+edge_sso_installation_config_file_path "{{ opdk_installer_path }}/{{ edge_sso_installation_config_file_name }}"
 
 jwt_folder: "{{ apigee_home }}/customer/application/apigee-sso/jwt-keys"
 sso_jwt_signinig_key_file_name: private_key.pem

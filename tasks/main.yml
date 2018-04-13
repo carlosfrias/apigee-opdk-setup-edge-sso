@@ -15,8 +15,8 @@
   - { key: 'sso_jwt_signinig_key_file_path', value: '{{ sso_jwt_signinig_key_file_path }}' }
   - { key: 'sso_saml_service_provider_key', value: '{{ sso_saml_service_provider_key }}' }
   - { key: 'sso_saml_service_provider_certificate', value: '{{ sso_saml_service_provider_certificate_file_path}}' }
-  - { key: 'edge_sso_installation_config_filename' , value: '{{ edge_sso_installation_config_filename }}' }
-  - { key: 'edge_sso_installation_config_file', value: "{{ edge_sso_installation_config_file }}" }
+  - { key: 'edge_sso_installation_config_file_name' , value: '{{ edge_sso_installation_config_file_name }}' }
+  - { key: 'edge_sso_installation_config_file_path', value: "{{ edge_sso_installation_config_file_path }}" }
   - { key: 'saml_folder', value: "{{ saml_folder }}" }
   - { key: 'jwt_folder', value: "{{ jwt_folder }}" }
 
@@ -48,7 +48,7 @@
   become: yes
   file:
     state: touch
-    path: "{{ edge_sso_installation_config_file }}"
+    path: "{{ edge_sso_installation_config_file_path }}"
 
 - name: Assert that availability of SAML IDP metadata file
   assert:
@@ -58,21 +58,21 @@
 - name: Construct the Edge SSO Installation config file file
   become: yes
   template:
-    src: '{{ edge_sso_installation_config_filename }}.j2'
-    dest: "{{ edge_sso_installation_config_file }}"
+    src: '{{ edge_sso_installation_config_file_name }}.j2'
+    dest: "{{ edge_sso_installation_config_file_path }}"
     force: yes
     owner: '{{ opdk_user_name }}'
     group: '{{ opdk_group_name }}'
     mode: 0655
-  when: manual_edge_sso_installation_config_file is not defined or not manual_edge_sso_installation_config_file
+  when: manual_edge_sso_installation_config_file_path is not defined and manual_edge_sso_installation_config_file_path | trim | length == 0
 
-- name: Copy the provided Edge SSO Installation config file
+- name: Use the provided Edge SSO Installation config file
   become: yes
   copy:
-    src: "{{ manual_edge_sso_installation_config_file }}"
-    dest: "{{ edge_sso_installation_config_file }}"
+    src: "{{ manual_edge_sso_installation_config_file_path }}"
+    dest: "{{ edge_sso_installation_config_file_path }}"
     owner: '{{ opdk_user_name }}'
     group: '{{ opdk_group_name }}'
     mode: 0655
-  when: manual_edge_sso_installation_config_file is defined and manual_edge_sso_installation_config_file
+  when: manual_edge_sso_installation_config_file_path is defined and manual_edge_sso_installation_config_file_path  | trim | length > 0
 
