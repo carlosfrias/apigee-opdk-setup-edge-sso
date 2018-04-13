@@ -1,4 +1,9 @@
 ---
+- name: Assert that service provider key file exists
+  stat:
+    path: "{{ sso_saml_service_provider_key_filename}}"
+  register: key
+
 - block:
   - name: Create SAML folder
     file:
@@ -59,3 +64,4 @@
       chdir: "{{ saml_folder }}"
 
   become: yes
+  when: key.stat.exists == false
