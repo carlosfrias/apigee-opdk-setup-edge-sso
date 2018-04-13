@@ -42,7 +42,7 @@
       sso_saml_idp_metadata_url: "file://{{ sso_saml_idp_metadata_target_file_path }}"
 
   become: true
-  when: sso_saml_idp_metadata_local_file_name is defined and sso_saml_idp_metadata_local_file_name | trim | length < 0
+  when: sso_saml_idp_metadata_local_file_name is defined and sso_saml_idp_metadata_local_file_name | trim | length > 0
 
 - name: Touch file
   become: yes
