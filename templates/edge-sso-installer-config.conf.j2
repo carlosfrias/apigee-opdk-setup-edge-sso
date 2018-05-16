@@ -51,7 +51,7 @@ SSO_SAML_IDP_METADATA_URL={{ sso_saml_idp_metadata_url }}
 SSO_SAML_IDPMETAURL_SKIPSSLVALIDATION={{ sso_saml_idpmetaurl_skipsslvalidation | default('n') }}
 
 # SAML service provider key and cert from "Create the TLS keys and certificates" above.
-SSO_SAML_SERVICE_PROVIDER_KEY={{ sso_saml_service_provider_key_file_name | default('/opt/apigee/customer/application/apigee-sso/saml/server.key') }}
+SSO_SAML_SERVICE_PROVIDER_KEY={{ sso_saml_service_provider_key_file_path | default('/opt/apigee/customer/application/apigee-sso/saml/server.key') }}
 SSO_SAML_SERVICE_PROVIDER_CERTIFICATE={{  sso_saml_service_provider_certificate | default('/opt/apigee/customer/application/apigee-sso/saml/selfsigned.crt') }}
 # The passphrase used when you created the SAML cert and key.
 # The section "Create the TLS keys and certificates" above removes the passphrase,
