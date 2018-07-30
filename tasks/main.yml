@@ -17,7 +17,7 @@
   - { key: 'sso_jwt_signinig_key_file_path', value: '{{ sso_jwt_signinig_key_file_path }}' }
   - { key: 'sso_saml_service_provider_key_file_name', value: '{{ sso_saml_service_provider_key_file_name }}' }
   - { key: 'sso_saml_service_provider_key_file_path', value: '{{ sso_saml_service_provider_key_file_path }}' }
-  - { key: 'sso_saml_service_provider_certificate', value: '{{ sso_saml_service_provider_certificate_file_path}}' }
+  - { key: 'sso_saml_service_provider_certificate', value: '{{ sso_saml_service_provider_certificate_file_path }}' }
   - { key: 'edge_sso_installation_config_file_name' , value: '{{ edge_sso_installation_config_file_name }}' }
   - { key: 'edge_sso_installation_config_file_path', value: "{{ edge_sso_installation_config_file_path }}" }
 
