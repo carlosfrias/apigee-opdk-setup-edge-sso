@@ -14,7 +14,7 @@ Role Variables
 | Variable Name | Description |
 | --- | --- |
 | edge_sso_installation_config_filename | edge-sso-installer-config.conf |
-| edge_sso_installation_config_file | "{{ opdk_installer_path }}/{{ edge_sso_installation_config_filename }}" |
+| edge_sso_installation_config_file | "{{ opdk_resources_path }}/{{ edge_sso_installation_config_filename }}" |
 | jwt_key_folder | "{{ apigee_home }}/customer/application/apigee-sso/jwt-keys" |
 | jwt_private_key | private_key.pem |
 | sso_jwt_signinig_key_filepath | "{{ jwt_key_folder }}/{{ jwt_private_key }}" |
